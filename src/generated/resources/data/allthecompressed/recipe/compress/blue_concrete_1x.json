@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "allthecompressed",
+  "key": {
+    "#": "minecraft:blue_concrete"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "allthecompressed:blue_concrete_1x"
+  }
+}

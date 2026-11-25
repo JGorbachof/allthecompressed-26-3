@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "allthecompressed",
+  "key": {
+    "#": "allthecompressed:dirt_6x"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "allthecompressed:dirt_7x"
+  }
+}

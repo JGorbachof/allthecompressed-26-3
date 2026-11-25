@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "allthecompressed",
+  "key": {
+    "#": "allthecompressed:acacia_planks_6x"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "allthecompressed:acacia_planks_7x"
+  }
+}

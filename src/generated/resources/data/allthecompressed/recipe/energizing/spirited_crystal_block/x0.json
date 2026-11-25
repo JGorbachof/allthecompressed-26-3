@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "powah"
+    }
+  ],
+  "type": "powah:energizing",
+  "energy": 9000000,
+  "ingredients": [
+    "minecraft:emerald_block"
+  ],
+  "result": {
+    "id": "powah:spirited_crystal_block"
+  }
+}

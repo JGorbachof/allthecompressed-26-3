@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "allthecompressed",
+  "ingredients": [
+    "allthecompressed:gravel_4x"
+  ],
+  "result": {
+    "count": 9,
+    "id": "allthecompressed:gravel_3x"
+  }
+}

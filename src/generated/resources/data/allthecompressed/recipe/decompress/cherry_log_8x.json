@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "allthecompressed",
+  "ingredients": [
+    "allthecompressed:cherry_log_8x"
+  ],
+  "result": {
+    "count": 9,
+    "id": "allthecompressed:cherry_log_7x"
+  }
+}

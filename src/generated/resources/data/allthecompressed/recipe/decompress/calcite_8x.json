@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "allthecompressed",
+  "ingredients": [
+    "allthecompressed:calcite_8x"
+  ],
+  "result": {
+    "count": 9,
+    "id": "allthecompressed:calcite_7x"
+  }
+}

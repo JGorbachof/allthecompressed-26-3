@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "allthecompressed",
+  "ingredients": [
+    "allthecompressed:nether_wart_block_1x"
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:nether_wart_block"
+  }
+}

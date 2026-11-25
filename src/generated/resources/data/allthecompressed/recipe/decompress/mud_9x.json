@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "allthecompressed",
+  "ingredients": [
+    "allthecompressed:mud_9x"
+  ],
+  "result": {
+    "count": 9,
+    "id": "allthecompressed:mud_8x"
+  }
+}

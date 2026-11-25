@@ -1,0 +1,85 @@
+package com.pdiddy973.allthecompressed.data.compat;
+
+import com.pdiddy973.allthecompressed.AllTheCompressed;
+import com.pdiddy973.allthecompressed.overlay.Overlays;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
+import owmii.powah.block.energizing.EnergizingRecipe;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.pdiddy973.allthecompressed.util.ResourceUtil.prefix;
+
+public class EnergizingRecipeBuilder {
+    final Overlays overlay;
+    final int count;
+
+    long energy = 0L;
+    List<Overlays> ingredients = new ArrayList<>();
+
+    public EnergizingRecipeBuilder(Overlays overlay, int count) {
+        this.overlay = overlay;
+        this.count = count;
+    }
+
+    public static EnergizingRecipeBuilder build(Overlays overlays) {
+        return new EnergizingRecipeBuilder(overlays, 1);
+    }
+
+    public static EnergizingRecipeBuilder build(Overlays overlays, int count) {
+        return new EnergizingRecipeBuilder(overlays, count);
+    }
+
+    public EnergizingRecipeBuilder setEnergy(long energy) {
+        this.energy = energy;
+        return this;
+    }
+
+    public EnergizingRecipeBuilder addIngredient(Overlays ingredient) {
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
+    public void save(RecipeOutput powah) {
+        for (int i = 0; i < 10; i++) {
+            ItemStackTemplate output;
+            List<Ingredient> inputs = new ArrayList<>();
+
+            long totalEnergy = energy * (long) Math.pow(9, i);
+
+            if (totalEnergy > Integer.MAX_VALUE) {
+                return;
+            }
+
+            if (i == 0) {
+                var parent = overlay.overlay.parent;
+                var block = BuiltInRegistries.BLOCK.getOptional(parent);
+
+                if (block.isEmpty() || block.get() == Blocks.AIR) {
+                    AllTheCompressed.LOGGER.error("missing block during datagen: {}", parent);
+                    continue;
+                }
+
+                output = new ItemStackTemplate(block.get().asItem(), count);
+                for (Overlays ingredient : ingredients) {
+                    var iblock = BuiltInRegistries.BLOCK.getOrThrow(ResourceKey.create(Registries.BLOCK, ingredient.overlay.parent));
+                    inputs.add(Ingredient.of(iblock.value()));
+                }
+            } else {
+                output = new ItemStackTemplate(overlay.overlay.iall.get(i - 1).asItem(), count);
+                for (Overlays ingredient : ingredients) {
+                    inputs.add(Ingredient.of(ingredient.overlay.iall.get(i - 1)));
+                }
+            }
+
+            String path = String.format("energizing/%s/x%d", overlay.overlay.parent.getPath(), i);
+            powah.accept(ResourceKey.create(Registries.RECIPE, prefix(path)), new EnergizingRecipe(output, totalEnergy, inputs), null);
+        }
+    }
+}

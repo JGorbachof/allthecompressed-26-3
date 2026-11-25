@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "powah"
+    }
+  ],
+  "type": "powah:energizing",
+  "energy": 65610000,
+  "ingredients": [
+    "allthecompressed:iron_block_3x",
+    "allthecompressed:gold_block_3x"
+  ],
+  "result": {
+    "count": 2,
+    "id": "allthecompressed:energized_steel_block_3x"
+  }
+}

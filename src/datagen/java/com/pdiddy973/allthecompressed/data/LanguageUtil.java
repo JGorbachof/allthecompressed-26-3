@@ -1,0 +1,97 @@
+package com.pdiddy973.allthecompressed.data;
+
+import com.google.common.collect.ImmutableMap;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.StringDecomposer;
+import net.neoforged.fml.ModList;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+public class LanguageUtil {
+    private final Map<String, Language> languageMap = new HashMap<>();
+    private final Map<String, String> translations = new HashMap<>();
+    private final ResourceManager clientResources;
+
+    public LanguageUtil(ResourceManager clientResources) {
+        this.clientResources = clientResources;
+        languageMap.put("minecraft", Language.getInstance());
+        languageMap.put("allthecompressed", loadLanguage(translations));
+    }
+
+    public void put(String key, String value) {
+        translations.put(key, value);
+    }
+
+    public String getParentName(Identifier parent) {
+        String translationKey = String.format("block.%s.%s", parent.getNamespace(), parent.getPath());
+        return getLanguage(parent.getNamespace()).getOrDefault(translationKey);
+    }
+
+    private Language getLanguage(String mod) {
+        if (!ModList.get().isLoaded(mod)) {
+            throw new IllegalArgumentException("Mod is not loaded: " + mod);
+        }
+        return languageMap.computeIfAbsent(mod, this::loadLanguage);
+    }
+
+    /**
+     * @see net.minecraft.locale.Language#loadDefault()
+     * Adapted from loadDefault to load lang files from other mods at runtime,
+     * in order to generate x1-x9 names based on the original block name
+     * @param mod the mod to load from
+     * @return the new Language object
+     */
+    @SuppressWarnings({"java:S5803", "java:S112"}) // ignore VisibleForTesting warning
+    private Language loadLanguage(String mod) {
+        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+        String langFile = String.format("/assets/%s/lang/en_us.json", mod);
+
+        try {
+            Resource resource = clientResources.getResourceOrThrow(Identifier.fromNamespaceAndPath(mod, "lang/en_us.json"));
+            InputStream is = resource.open();
+            Language.loadFromJson(is, builder::put);
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Failed to load file: %s", langFile), e);
+        }
+
+        final Map<String, String> map = new java.util.HashMap<>(builder.build());
+        return loadLanguage(map);
+    }
+
+    private Language loadLanguage(final Map<String, String> map) {
+        return new Language() {
+            public String getOrDefault(String key, String fallback) {
+                return map.getOrDefault(key, fallback);
+            }
+
+            public boolean has(String key) {
+                return map.containsKey(key);
+            }
+
+            public boolean isDefaultRightToLeft() {
+                return false;
+            }
+
+            public FormattedCharSequence getVisualOrder(FormattedText formattedText) {
+                return sink -> formattedText.visit((style, text) -> {
+                    return StringDecomposer.iterateFormatted(text, style, sink) ? Optional.empty() : FormattedText.STOP_ITERATION;
+                }, Style.EMPTY).isPresent();
+            }
+
+            @Override
+            public Map<String, String> getLanguageData() {
+                return map;
+            }
+        };
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "allthecompressed",
+  "ingredients": [
+    "allthecompressed:honeycomb_block_5x"
+  ],
+  "result": {
+    "count": 9,
+    "id": "allthecompressed:honeycomb_block_4x"
+  }
+}
